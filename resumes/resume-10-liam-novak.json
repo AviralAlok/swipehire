@@ -1,0 +1,50 @@
+{
+  "id": 10,
+  "name": "Liam Novak",
+  "email": "liam.novak@email.com",
+  "phone": "+1 (312) 555-0229",
+  "location": "Chicago, IL",
+  "title": "Quantitative Analyst",
+  "experience_years": 4,
+  "summary": "Quant analyst at a multi-strategy hedge fund. Builds and validates systematic equity and derivatives signals. Focuses on factor research and risk-adjusted return optimization. Prior internship at Citadel.",
+  "skills": {
+    "hard": ["Statistical modeling", "Derivatives pricing", "Options Greeks", "Factor research", "Backtesting", "VaR / CVaR", "Time series analysis", "Stochastic calculus"],
+    "soft": ["Analytical rigor", "Intellectual curiosity", "Attention to detail", "Research depth", "Concise presentation of findings"],
+    "tools": ["Python", "MATLAB", "Bloomberg Terminal", "Excel", "R", "Jupyter"]
+  },
+  "work_history": [
+    {
+      "company": "Arcstone Capital (Hedge Fund)",
+      "role": "Quantitative Analyst",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Developed equity factor model (momentum, value, quality) with 0.91 Sharpe in backtest across 2010–2023",
+        "Built derivatives pricing library in Python used by 4 portfolio managers",
+        "Owns daily VaR/CVaR reporting for $500M multi-strategy book"
+      ]
+    },
+    {
+      "company": "JP Morgan (Investment Banking)",
+      "role": "Quantitative Research Analyst",
+      "duration": "2021 – 2022",
+      "highlights": [
+        "Supported rates desk with interest rate model calibration and scenario analysis",
+        "Automated Monte Carlo simulation workflows cutting overnight batch time by 40%"
+      ]
+    },
+    {
+      "company": "Citadel",
+      "role": "Quantitative Research Intern",
+      "duration": "Summer 2020",
+      "highlights": [
+        "Researched intraday momentum signals in US equities",
+        "Return offer received"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "M.S. Financial Mathematics",
+    "institution": "University of Chicago",
+    "year": 2021
+  }
+}

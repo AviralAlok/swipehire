@@ -1,0 +1,51 @@
+{
+  "id": 1,
+  "name": "Priya Sharma",
+  "email": "priya.sharma@email.com",
+  "phone": "+1 (415) 555-0192",
+  "location": "San Francisco, CA",
+  "title": "Senior Frontend Engineer",
+  "experience_years": 6,
+  "summary": "Passionate frontend engineer with 6 years building scalable SPAs. Led a full React migration at a fintech startup, cutting load times by 40%. Strong focus on performance, accessibility, and design systems.",
+  "skills": {
+    "hard": ["React", "TypeScript", "CSS", "GraphQL", "Redux", "Webpack", "Web accessibility (WCAG)"],
+    "soft": ["Cross-functional collaboration", "Mentorship", "Attention to detail", "Proactive communication"],
+    "tools": ["Figma", "Storybook", "Jest", "GitHub Actions", "Linear", "VS Code"]
+  },
+  "work_history": [
+    {
+      "company": "FinEdge Inc.",
+      "role": "Senior Frontend Engineer",
+      "duration": "2021 – Present",
+      "highlights": [
+        "Led migration of legacy jQuery app to React + TypeScript, reducing bundle size by 45%",
+        "Built a component design system adopted by 4 product teams, eliminating UI inconsistencies",
+        "Mentored 2 junior engineers and ran weekly code review sessions"
+      ]
+    },
+    {
+      "company": "Shopwave",
+      "role": "Frontend Developer",
+      "duration": "2019 – 2021",
+      "highlights": [
+        "Owned the checkout flow UI handling $2M+ daily transactions",
+        "Integrated GraphQL layer replacing 12 REST endpoints, reducing over-fetching by 60%",
+        "Improved Lighthouse performance score from 54 to 91"
+      ]
+    },
+    {
+      "company": "Pixel Labs (Agency)",
+      "role": "Junior Web Developer",
+      "duration": "2018 – 2019",
+      "highlights": [
+        "Built responsive marketing sites for 8 clients using React and vanilla CSS",
+        "Introduced CSS-in-JS (styled-components) to the team workflow"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Computer Science",
+    "institution": "UC San Diego",
+    "year": 2018
+  }
+}

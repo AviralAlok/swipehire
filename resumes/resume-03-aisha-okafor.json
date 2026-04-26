@@ -1,0 +1,50 @@
+{
+  "id": 3,
+  "name": "Aisha Okafor",
+  "email": "aisha.okafor@email.com",
+  "phone": "+1 (929) 555-0481",
+  "location": "New York, NY",
+  "title": "Backend Engineer",
+  "experience_years": 5,
+  "summary": "Backend specialist with deep Python expertise and a track record building high-reliability APIs at scale. Designed systems handling 10M+ daily requests. Passionate about observability, clean architecture, and mentoring junior engineers.",
+  "skills": {
+    "hard": ["Python", "Django", "PostgreSQL", "Redis", "REST APIs", "Celery", "System design"],
+    "soft": ["Technical communication", "Systematic debugging", "Reliability focus", "Mentorship"],
+    "tools": ["AWS", "Docker", "Datadog", "pgAdmin", "Confluence"]
+  },
+  "work_history": [
+    {
+      "company": "CartNova (E-commerce)",
+      "role": "Senior Backend Engineer",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Designed inventory management API handling 10M+ daily requests with 99.98% uptime",
+        "Migrated monolithic Django app to service-oriented architecture, reducing deploy blast radius",
+        "Introduced async task processing with Celery + Redis, cutting order confirmation latency by 70%"
+      ]
+    },
+    {
+      "company": "DataBridge",
+      "role": "Backend Developer",
+      "duration": "2020 – 2022",
+      "highlights": [
+        "Built data ingestion pipelines processing 500GB of partner data per day",
+        "Owned PostgreSQL query optimization work that reduced p95 latency from 800ms to 90ms"
+      ]
+    },
+    {
+      "company": "NexGen Solutions",
+      "role": "Junior Python Developer",
+      "duration": "2019 – 2020",
+      "highlights": [
+        "Contributed to internal tooling and REST API development",
+        "Wrote comprehensive test suites increasing coverage from 42% to 85%"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Computer Science",
+    "institution": "Columbia University",
+    "year": 2019
+  }
+}

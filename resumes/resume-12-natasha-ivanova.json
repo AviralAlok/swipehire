@@ -1,0 +1,51 @@
+{
+  "id": 12,
+  "name": "Natasha Ivanova",
+  "email": "natasha.ivanova@email.com",
+  "phone": "+1 (646) 555-0823",
+  "location": "New York, NY",
+  "title": "Quantitative Trader",
+  "experience_years": 6,
+  "summary": "Quant trader on the FX derivatives desk at a global investment bank. Manages a structured FX options book, runs daily P&L attribution, and develops automated execution strategies. 6 years across Goldman Sachs and JP Morgan.",
+  "skills": {
+    "hard": ["FX derivatives", "Options pricing", "P&L attribution", "Algorithmic execution", "Volatility surface modeling", "Fixed income", "Risk management", "Greeks hedging"],
+    "soft": ["Composure under pressure", "Quick decision-making", "Risk awareness", "Attention to detail", "Concise risk communication"],
+    "tools": ["Bloomberg Terminal", "Python", "Excel VBA", "MATLAB", "Reuters Eikon", "Murex"]
+  },
+  "work_history": [
+    {
+      "company": "Goldman Sachs",
+      "role": "Quantitative Trader — FX Derivatives",
+      "duration": "2023 – Present",
+      "highlights": [
+        "Manages structured FX options book with $200M notional, with daily delta/vega hedging",
+        "Developed automated execution strategy for vanilla FX options reducing market impact by 18%",
+        "Owns real-time volatility surface model calibration integrated into trading desk risk system"
+      ]
+    },
+    {
+      "company": "JP Morgan",
+      "role": "Rates Trader",
+      "duration": "2020 – 2023",
+      "highlights": [
+        "Traded USD and EUR interest rate swaps on the flow rates desk",
+        "Built Excel VBA tooling for intraday P&L attribution used by 8 traders",
+        "Rotated through FX and credit desks as part of structured trader development program"
+      ]
+    },
+    {
+      "company": "JP Morgan",
+      "role": "Sales & Trading Analyst",
+      "duration": "2018 – 2020",
+      "highlights": [
+        "Completed analyst rotations across fixed income, FX, and equities",
+        "Top analyst cohort ranking — offered early promotion to associate"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Mathematics & Economics",
+    "institution": "NYU Stern",
+    "year": 2018
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": 6,
+  "name": "Arjun Patel",
+  "email": "arjun.patel@email.com",
+  "phone": "+1 (408) 555-0136",
+  "location": "San Jose, CA",
+  "title": "Senior Product Manager",
+  "experience_years": 6,
+  "summary": "Fintech PM with deep domain expertise across payments, lending, and compliance. Led the launch of a card issuing platform that processed $1B in transactions in year one. Pushes features from discovery to GA with minimal hand-holding.",
+  "skills": {
+    "hard": ["Product strategy", "Payments domain", "Roadmapping", "A/B testing", "Regulatory awareness (PCI/KYC)", "User research", "Go-to-market"],
+    "soft": ["Stakeholder alignment", "Executive communication", "Decisive under ambiguity", "Prioritization", "Influencing without authority"],
+    "tools": ["Jira", "Figma", "Amplitude", "SQL", "Notion"]
+  },
+  "work_history": [
+    {
+      "company": "Vanta Payments",
+      "role": "Senior Product Manager",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Led card issuing platform from zero to $1B in processed transactions in 12 months",
+        "Drove KYC/KYB compliance overhaul that unblocked enterprise deals worth $4M ARR",
+        "Managed roadmap across 3 squads and presented quarterly plans to the board"
+      ]
+    },
+    {
+      "company": "LendRight",
+      "role": "Product Manager",
+      "duration": "2020 – 2022",
+      "highlights": [
+        "Launched consumer lending product in 6 states, growing to 40k borrowers in 18 months",
+        "Owned A/B test program that improved application completion rate from 38% to 61%"
+      ]
+    },
+    {
+      "company": "Stripe",
+      "role": "Associate Product Manager",
+      "duration": "2018 – 2020",
+      "highlights": [
+        "Supported launch of Stripe Issuing in 3 new markets",
+        "Built internal tooling for compliance operations teams"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Computer Science",
+    "institution": "Stanford University",
+    "year": 2018
+  }
+}

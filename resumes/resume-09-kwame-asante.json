@@ -1,0 +1,41 @@
+{
+  "id": 9,
+  "name": "Kwame Asante",
+  "email": "kwame.asante@email.com",
+  "phone": "+1 (404) 555-0648",
+  "location": "Atlanta, GA",
+  "title": "Operations Analyst",
+  "experience_years": 3,
+  "summary": "Ops analyst who turns messy processes into documented, automated workflows. Built a vendor onboarding tracker that cut cycle time by 40%. Comfortable writing SQL to pull his own data and never waits on a BI ticket.",
+  "skills": {
+    "hard": ["Workflow analysis", "SQL reporting", "Vendor onboarding", "SLA compliance", "Process documentation", "Data reconciliation"],
+    "soft": ["Detail-oriented", "Collaborative", "Proactive", "Adaptable", "Clear written communication"],
+    "tools": ["SQL", "Excel", "Power BI", "Salesforce", "Asana", "Confluence"]
+  },
+  "work_history": [
+    {
+      "company": "Groundwork (Operations SaaS)",
+      "role": "Operations Analyst",
+      "duration": "2023 – Present",
+      "highlights": [
+        "Built vendor onboarding tracker in Asana + SQL that reduced average cycle time from 18 to 11 days",
+        "Owns SLA compliance reporting for 40+ vendor relationships, reviewed weekly by VP of Ops",
+        "Documented 25 previously undocumented processes — now used for team onboarding"
+      ]
+    },
+    {
+      "company": "RetailCore",
+      "role": "Operations Coordinator",
+      "duration": "2021 – 2023",
+      "highlights": [
+        "Managed daily order operations reconciliation for $8M/month of merchandise",
+        "Built Power BI dashboards reducing weekly ops reporting from 4 hours to 20 minutes"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.B.A. Business Administration",
+    "institution": "Georgia State University",
+    "year": 2021
+  }
+}

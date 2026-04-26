@@ -1,0 +1,50 @@
+{
+  "id": 8,
+  "name": "James Obi",
+  "email": "james.obi@email.com",
+  "phone": "+1 (206) 555-0784",
+  "location": "Seattle, WA",
+  "title": "Business Operations Manager",
+  "experience_years": 5,
+  "summary": "Ops manager with a consulting background who brings structure to fast-moving teams. Owns KPI tracking, cross-functional project coordination, and revenue operations for a 200-person SaaS company. Former McKinsey analyst.",
+  "skills": {
+    "hard": ["Revenue operations", "KPI tracking", "Vendor negotiation", "Budget forecasting", "Process design", "Project coordination", "Business case modeling"],
+    "soft": ["Structured thinking", "Data-driven mindset", "Calm under pressure", "Team alignment", "Executive communication"],
+    "tools": ["SQL", "Tableau", "Excel", "Asana", "Salesforce", "HubSpot"]
+  },
+  "work_history": [
+    {
+      "company": "Veloce (SaaS, 200 employees)",
+      "role": "Business Operations Manager",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Owns revenue operations function — pipeline hygiene, forecasting, and CRM governance",
+        "Built company-wide KPI dashboard used by all VP+ stakeholders in weekly reviews",
+        "Drove annual vendor renegotiations saving $600k across 8 contracts"
+      ]
+    },
+    {
+      "company": "NestLogic",
+      "role": "Operations Lead",
+      "duration": "2021 – 2022",
+      "highlights": [
+        "Led cross-functional workstream to consolidate 3 ops tools into a single system, reducing tool costs by 35%",
+        "Created budget forecasting model now used by finance team quarterly"
+      ]
+    },
+    {
+      "company": "McKinsey & Company",
+      "role": "Business Analyst",
+      "duration": "2019 – 2021",
+      "highlights": [
+        "Delivered operational transformation projects for clients in tech and financial services",
+        "Specialized in process design and change management workstreams"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Economics",
+    "institution": "University of Michigan",
+    "year": 2019
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": 7,
+  "name": "Sofia Reyes",
+  "email": "sofia.reyes@email.com",
+  "phone": "+1 (213) 555-0563",
+  "location": "Los Angeles, CA",
+  "title": "Head of Operations",
+  "experience_years": 7,
+  "summary": "Operations leader who scaled a logistics startup from 15 to 120 people. Built vendor management frameworks, SLA reporting, and a company-wide OKR process from scratch. Comfortable partnering directly with the CEO on org design and strategy.",
+  "skills": {
+    "hard": ["Process optimization", "Vendor management", "Headcount planning", "OKR frameworks", "SLA management", "Budget ownership", "Org design"],
+    "soft": ["Leadership", "Stakeholder management", "Conflict resolution", "Strategic thinking", "Executive presence"],
+    "tools": ["Jira", "Salesforce", "Tableau", "Looker", "Notion", "Google Workspace"]
+  },
+  "work_history": [
+    {
+      "company": "Freightly (Series B Logistics)",
+      "role": "Head of Operations",
+      "duration": "2021 – Present",
+      "highlights": [
+        "Scaled operations team from 15 to 120 people across 4 cities in 2 years",
+        "Built vendor management framework covering 80+ carrier partners, reducing SLA breaches by 55%",
+        "Introduced company-wide OKR process adopted by all 6 departments"
+      ]
+    },
+    {
+      "company": "Lumi (D2C Brand)",
+      "role": "Operations Manager",
+      "duration": "2019 – 2021",
+      "highlights": [
+        "Managed end-to-end supply chain from manufacturer to customer, overseeing $12M in annual inventory",
+        "Renegotiated 3PL contracts saving $400k/year without service degradation"
+      ]
+    },
+    {
+      "company": "Deloitte",
+      "role": "Business Analyst",
+      "duration": "2017 – 2019",
+      "highlights": [
+        "Delivered operational efficiency projects for Fortune 500 clients in retail and logistics",
+        "Built process mapping frameworks used across 3 client engagements"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Industrial Engineering",
+    "institution": "USC",
+    "year": 2017
+  }
+}

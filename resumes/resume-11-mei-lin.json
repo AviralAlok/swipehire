@@ -1,0 +1,41 @@
+{
+  "id": 11,
+  "name": "Mei Lin",
+  "email": "mei.lin@email.com",
+  "phone": "+1 (650) 555-0915",
+  "location": "New York, NY",
+  "title": "Quantitative Researcher",
+  "experience_years": 5,
+  "summary": "Quant researcher at a top-5 HFT firm. Researches and implements statistical arbitrage strategies in equities and futures. Deep expertise in market microstructure and low-latency signal generation. Published in the Journal of Financial Economics.",
+  "skills": {
+    "hard": ["Statistical arbitrage", "Signal research", "Market microstructure", "Low-latency systems", "Backtesting frameworks", "Stochastic processes", "C++ optimization"],
+    "soft": ["Intellectual rigor", "Precision", "Fast iteration", "Independent research", "Clear documentation of methodology"],
+    "tools": ["Python", "C++", "kdb+/q", "NumPy", "pandas", "Git"]
+  },
+  "work_history": [
+    {
+      "company": "Apex HFT (Top-5 HFT Firm)",
+      "role": "Quantitative Researcher",
+      "duration": "2021 – Present",
+      "highlights": [
+        "Researched and deployed 3 live stat-arb strategies in US equities generating $12M+ annual PnL",
+        "Built backtesting framework in Python/C++ handling tick-level data for 5,000+ symbols",
+        "Reduced signal latency by 30% through order book feature engineering and C++ microoptimizations"
+      ]
+    },
+    {
+      "company": "Two Sigma",
+      "role": "Quantitative Research Associate",
+      "duration": "2019 – 2021",
+      "highlights": [
+        "Contributed to systematic futures strategies using alternative data sources",
+        "Published internal research on microstructure alpha decay across asset classes"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "Ph.D. Statistics",
+    "institution": "MIT",
+    "year": 2019
+  }
+}

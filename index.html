@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwipeHire</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 16px 24px;
+        }
+
+        .logo { font-size: 22px; font-weight: 700; color: #2563eb; }
+        .logo span { color: #f97316; }
+
+        /* JD Phase */
+        #jd-phase {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 24px;
+        }
+
+        .jd-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .jd-card h2 { font-size: 24px; color: #111; margin-bottom: 8px; }
+        .jd-card p { color: #666; margin-bottom: 24px; }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 16px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        textarea:focus { border-color: #2563eb; }
+
+        .btn-primary {
+            margin-top: 16px;
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #1d4ed8; }
+        .btn-primary:disabled { background: #93afd4; cursor: not-allowed; }
+
+        .candidate-reasoning {
+            font-size: 12px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        /* Swipe Phase */
+        #swipe-phase {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 32px 24px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            max-width: 440px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .progress-text { font-size: 13px; color: #666; white-space: nowrap; }
+
+        .progress-track {
+            flex: 1;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 2px;
+            transition: width 0.3s;
+        }
+
+        .card-stack {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            height: 500px;
+        }
+
+        .candidate-card {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 26px 28px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            transition: transform 0.45s ease, opacity 0.45s ease;
+            overflow-y: auto;
+        }
+
+        .candidate-card.swipe-right {
+            transform: translateX(160%) rotate(20deg) !important;
+            opacity: 0;
+        }
+        .candidate-card.swipe-left {
+            transform: translateX(-160%) rotate(-20deg) !important;
+            opacity: 0;
+        }
+
+        .swipe-hint {
+            position: absolute;
+            top: 24px;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 800;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.15s;
+        }
+        .hint-save { right: 24px; color: #16a34a; border: 3px solid #16a34a; transform: rotate(12deg); }
+        .hint-pass { left: 24px; color: #dc2626; border: 3px solid #dc2626; transform: rotate(-12deg); }
+
+        .match-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+        .match-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+        .match-high { background: #f0fdf4; color: #16a34a; }
+        .match-high .match-dot { background: #16a34a; }
+        .match-medium { background: #fffbeb; color: #d97706; }
+        .match-medium .match-dot { background: #d97706; }
+        .match-low { background: #fef2f2; color: #dc2626; }
+        .match-low .match-dot { background: #dc2626; }
+
+        .candidate-name { font-size: 21px; font-weight: 700; color: #111; margin-bottom: 3px; }
+        .candidate-title { font-size: 14px; color: #555; margin-bottom: 2px; }
+        .candidate-exp { font-size: 13px; color: #999; margin-bottom: 12px; }
+
+        .divider { height: 1px; background: #f0f0f0; margin: 12px 0; }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aaa;
+            margin-bottom: 7px;
+        }
+
+        .skills { display: flex; flex-wrap: wrap; gap: 5px; }
+
+        .skill-tag {
+            font-size: 11px;
+            padding: 3px 9px;
+            border-radius: 5px;
+        }
+
+        /* hard skills */
+        .skill-hard { background: #f1f5f9; color: #334155; }
+        .skill-hard.match { background: #dbeafe; color: #1e40af; font-weight: 600; }
+
+        /* tools */
+        .skill-tool { background: #f5f3ff; color: #5b21b6; }
+        .skill-tool.match { background: #ede9fe; color: #4c1d95; font-weight: 600; }
+
+        .soft-skills-line {
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .candidate-bio { font-size: 13px; color: #555; line-height: 1.65; }
+
+        .action-buttons {
+            display: flex;
+            gap: 24px;
+            margin-top: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-action {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+        }
+        .btn-action:hover { transform: scale(1.1); }
+        .btn-action:active { transform: scale(0.93); }
+
+        .btn-pass { background: white; color: #ef4444; border: 2px solid #fca5a5; }
+        .btn-like { background: white; color: #22c55e; border: 2px solid #86efac; width: 68px; height: 68px; font-size: 26px; }
+
+        .key-hint { font-size: 12px; color: #bbb; text-align: center; margin-top: 10px; }
+
+        /* Results Phase */
+        #results-phase {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 48px 24px;
+        }
+
+        .results-header { text-align: center; margin-bottom: 32px; }
+        .results-header h2 { font-size: 26px; font-weight: 700; color: #111; margin-bottom: 8px; }
+        .results-header p { color: #666; }
+
+        .saved-list {
+            width: 100%;
+            max-width: 580px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .saved-card {
+            background: white;
+            border-radius: 12px;
+            padding: 18px 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid #22c55e;
+        }
+
+        .saved-info h3 { font-size: 15px; font-weight: 600; color: #111; margin-bottom: 2px; }
+        .saved-info p { font-size: 13px; color: #666; }
+        .saved-info .saved-skills { margin-top: 5px; font-size: 12px; color: #999; }
+
+        .saved-pct {
+            font-size: 13px;
+            font-weight: 600;
+            color: #16a34a;
+            background: #f0fdf4;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .empty-state { text-align: center; color: #888; padding: 40px 0; }
+        .empty-state .big { font-size: 40px; margin-bottom: 12px; }
+
+        .btn-restart {
+            margin-top: 32px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-restart:hover { background: #1d4ed8; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Swipe<span>Hire</span></div>
+</header>
+
+<div id="jd-phase">
+    <div class="jd-card">
+        <h2>Post a Job Description</h2>
+        <p>Paste your JD below and we'll rank the best matching candidates for you to review.</p>
+        <textarea id="jd-input" placeholder="e.g. We're looking for a Quantitative Analyst with 3+ years at a hedge fund or investment bank. Strong Python and statistical modeling skills required. Bloomberg Terminal experience a plus..."></textarea>
+        <button class="btn-primary" onclick="startSwiping()">Find Candidates →</button>
+    </div>
+</div>
+
+<div id="swipe-phase" class="hidden">
+    <div class="progress-bar">
+        <span class="progress-text" id="progress-label">1 / 12</span>
+        <div class="progress-track">
+            <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <span class="progress-text" id="saved-count">0 saved</span>
+    </div>
+
+    <div class="card-stack" id="card-stack"></div>
+
+    <div class="action-buttons">
+        <button class="btn-action btn-pass" onclick="swipe('left')" title="Pass (← key)">✕</button>
+        <button class="btn-action btn-like" onclick="swipe('right')" title="Save (→ key)">✓</button>
+    </div>
+    <div class="key-hint">← Pass &nbsp;&nbsp; Save →</div>
+</div>
+
+<div id="results-phase" class="hidden">
+    <div class="results-header">
+        <h2>Your Shortlist</h2>
+        <p id="results-summary"></p>
+    </div>
+    <div class="saved-list" id="saved-list"></div>
+    <button class="btn-restart" onclick="restart()">← Start Over</button>
+</div>
+
+<script>
+const CANDIDATES = [
+    // --- Engineering (4) ---
+    {
+        id: 1,
+        name: "Priya Sharma",
+        title: "Senior Frontend Engineer",
+        experience: "6 years",
+        skills: {
+            hard: ["React", "TypeScript", "CSS", "GraphQL", "Redux", "Webpack"],
+            soft: ["Cross-functional collaboration", "Mentorship", "Attention to detail"],
+            tools: ["Figma", "Storybook", "Jest", "GitHub Actions", "Linear"]
+        },
+        bio: "Passionate frontend engineer with expertise building scalable SPAs. Led the React migration of a fintech platform cutting load times by 40%. Strong focus on performance, accessibility, and design systems."
+    },
+    {
+        id: 2,
+        name: "Marcus Chen",
+        title: "Full Stack Developer",
+        experience: "4 years",
+        skills: {
+            hard: ["Node.js", "React", "PostgreSQL", "Docker", "REST APIs", "TypeScript"],
+            soft: ["Ownership mentality", "Fast learner", "Pragmatic problem-solver"],
+            tools: ["AWS EC2", "Redis", "Postman", "GitHub", "Jira"]
+        },
+        bio: "Full stack developer comfortable across the entire web stack. Built and shipped 3 SaaS products from scratch. Thrives in fast-paced environments and owns features end to end."
+    },
+    {
+        id: 3,
+        name: "Aisha Okafor",
+        title: "Backend Engineer",
+        experience: "5 years",
+        skills: {
+            hard: ["Python", "Django", "PostgreSQL", "Redis", "REST APIs", "Celery"],
+            soft: ["Technical communication", "Systematic debugging", "Reliability focus"],
+            tools: ["AWS", "Docker", "Datadog", "pgAdmin", "Confluence"]
+        },
+        bio: "Backend specialist with deep Python expertise. Designed high-throughput APIs handling 10M+ daily requests at an e-commerce platform. Strong focus on observability and clean architecture."
+    },
+    {
+        id: 4,
+        name: "Derek Thompson",
+        title: "Java Backend Engineer",
+        experience: "8 years",
+        skills: {
+            hard: ["Java", "Spring Boot", "MySQL", "Kafka", "Microservices", "Distributed systems"],
+            soft: ["Technical leadership", "Systematic thinking", "Mentorship"],
+            tools: ["AWS", "Docker", "Elasticsearch", "Maven", "JUnit"]
+        },
+        bio: "Senior backend engineer with expertise in enterprise Java and distributed systems. Architected a microservices migration for a legacy monolith serving 2M+ users. Reduced API latency by 65% through query optimization."
+    },
+
+    // --- Product Management (2) ---
+    {
+        id: 5,
+        name: "Emma Walsh",
+        title: "Product Manager",
+        experience: "6 years",
+        skills: {
+            hard: ["Product discovery", "User research", "Sprint facilitation", "Data analysis", "B2B SaaS"],
+            soft: ["Cross-functional leadership", "Empathy", "Clear writing", "Prioritization"],
+            tools: ["Jira", "Figma", "SQL", "Mixpanel", "Notion"]
+        },
+        bio: "PM with an engineering background who bridges technical and business teams. Launched 4 B2B SaaS products. Comfortable diving into data, writing tight specs, and pushing back on scope creep."
+    },
+    {
+        id: 6,
+        name: "Arjun Patel",
+        title: "Senior Product Manager",
+        experience: "6 years",
+        skills: {
+            hard: ["Product strategy", "Payments domain", "Roadmapping", "A/B testing", "Regulatory awareness (PCI/KYC)", "User research"],
+            soft: ["Stakeholder alignment", "Executive communication", "Decisive under ambiguity", "Prioritization"],
+            tools: ["Jira", "Figma", "Amplitude", "SQL", "Notion"]
+        },
+        bio: "Fintech PM with deep expertise across payments, lending, and compliance. Led the launch of a card issuing platform that processed $1B in transactions in year one. Pushes features from discovery to GA with minimal hand-holding."
+    },
+
+    // --- Operations (3) ---
+    {
+        id: 7,
+        name: "Sofia Reyes",
+        title: "Head of Operations",
+        experience: "7 years",
+        skills: {
+            hard: ["Process optimization", "Vendor management", "Headcount planning", "OKR frameworks", "SLA management", "Budget ownership"],
+            soft: ["Leadership", "Stakeholder management", "Conflict resolution", "Strategic thinking"],
+            tools: ["Jira", "Salesforce", "Tableau", "Looker", "Notion"]
+        },
+        bio: "Operations leader who scaled a logistics startup from 15 to 120 people. Built vendor management frameworks, SLA reporting, and a company-wide OKR process from scratch. Comfortable partnering directly with the CEO on org design."
+    },
+    {
+        id: 8,
+        name: "James Obi",
+        title: "Business Operations Manager",
+        experience: "5 years",
+        skills: {
+            hard: ["Revenue operations", "KPI tracking", "Vendor negotiation", "Budget forecasting", "Process design", "Project coordination"],
+            soft: ["Structured thinking", "Data-driven mindset", "Calm under pressure", "Team alignment"],
+            tools: ["SQL", "Tableau", "Excel", "Asana", "Salesforce", "HubSpot"]
+        },
+        bio: "Ops manager with a consulting background who brings structure to fast-moving teams. Owns KPI tracking, cross-functional project coordination, and revenue ops for a 200-person SaaS company. Former McKinsey analyst."
+    },
+    {
+        id: 9,
+        name: "Kwame Asante",
+        title: "Operations Analyst",
+        experience: "3 years",
+        skills: {
+            hard: ["Workflow analysis", "SQL reporting", "Vendor onboarding", "SLA compliance", "Process documentation", "Data reconciliation"],
+            soft: ["Detail-oriented", "Collaborative", "Proactive", "Adaptable"],
+            tools: ["SQL", "Excel", "Power BI", "Salesforce", "Asana", "Confluence"]
+        },
+        bio: "Ops analyst who turns messy processes into documented, automated workflows. Built a vendor onboarding tracker that cut cycle time by 40%. Comfortable writing SQL to pull his own data and never waits for a BI ticket."
+    },
+
+    // --- Quant / Finance (3) ---
+    {
+        id: 10,
+        name: "Liam Novak",
+        title: "Quantitative Analyst",
+        experience: "4 years",
+        skills: {
+            hard: ["Statistical modeling", "Derivatives pricing", "Options Greeks", "Factor research", "Backtesting", "VaR / CVaR", "Time series analysis"],
+            soft: ["Analytical rigor", "Intellectual curiosity", "Attention to detail", "Research depth"],
+            tools: ["Python", "MATLAB", "Bloomberg Terminal", "Excel", "R", "Jupyter"]
+        },
+        bio: "Quant analyst at a multi-strategy hedge fund. Builds and validates systematic equity and derivatives signals. Focuses on factor research and risk-adjusted return optimization. Prior internship at Citadel."
+    },
+    {
+        id: 11,
+        name: "Mei Lin",
+        title: "Quantitative Researcher",
+        experience: "5 years",
+        skills: {
+            hard: ["Statistical arbitrage", "Signal research", "Market microstructure", "Low-latency systems", "Backtesting", "Stochastic processes"],
+            soft: ["Intellectual rigor", "Precision", "Fast iteration", "Independent research"],
+            tools: ["Python", "C++", "kdb+/q", "NumPy", "pandas", "Git"]
+        },
+        bio: "Quant researcher at a top-5 HFT firm. Researches and implements stat-arb strategies in equities and futures. Deep expertise in market microstructure and low-latency signal generation. Published in the Journal of Financial Economics."
+    },
+    {
+        id: 12,
+        name: "Natasha Ivanova",
+        title: "Quantitative Trader",
+        experience: "6 years",
+        skills: {
+            hard: ["FX derivatives", "Options pricing", "P&L attribution", "Algorithmic execution", "Volatility surface modeling", "Fixed income", "Risk management"],
+            soft: ["Composure under pressure", "Quick decision-making", "Risk awareness", "Attention to detail"],
+            tools: ["Bloomberg Terminal", "Python", "Excel VBA", "MATLAB", "Reuters Eikon", "Murex"]
+        },
+        bio: "Quant trader on the FX derivatives desk at a global investment bank. Manages a structured FX options book, runs daily P&L attribution, and develops automated execution strategies. 6 years at Goldman Sachs and JP Morgan."
+    }
+];
+
+const STOPWORDS = new Set([
+    'a','an','the','and','or','but','in','on','at','to','for','of','with','is','are','was',
+    'were','be','been','being','have','has','had','do','does','did','will','would','could',
+    'should','may','might','shall','can','we','i','you','they','he','she','it','this','that',
+    'these','those','our','your','their','its','my','his','her','us','them','who','which',
+    'what','when','where','how','why','not','no','as','by','from','into','through','about',
+    'up','out','over','then','once','more','also','just','than','both','each','few','most',
+    'other','same','such','own','so','if','while','after','before','between','looking',
+    'years','experience','strong','plus','seeking','ability','excellent','good','work',
+    'team','new','well','including','skills','role','join','candidate','responsibilities'
+]);
+
+let ranked = [];
+let idx = 0;
+let saved = [];
+let jdTokens = [];
+
+function tokenize(text) {
+    return text.toLowerCase()
+        .split(/[\s,.()\-\/\+#:;!?]+/)
+        .filter(w => w.length > 2 && !STOPWORDS.has(w));
+}
+
+function matchClass(score) {
+    if (score >= 75) return 'match-high';
+    if (score >= 50) return 'match-medium';
+    return 'match-low';
+}
+
+function matchLabel(score) {
+    if (score >= 75) return 'Strong Match';
+    if (score >= 50) return 'Good Match';
+    return 'Partial Match';
+}
+
+function isMatch(skill) {
+    const s = skill.toLowerCase();
+    return jdTokens.some(t => s.includes(t) || t.includes(s));
+}
+
+async function startSwiping() {
+    const jd = document.getElementById('jd-input').value.trim();
+    if (!jd) { alert('Please enter a job description first.'); return; }
+
+    const btn = document.querySelector('#jd-phase .btn-primary');
+    btn.textContent = 'Analyzing with AI…';
+    btn.disabled = true;
+
+    jdTokens = tokenize(jd);
+
+    const payload = CANDIDATES.map(c => ({
+        id: c.id, name: c.name, title: c.title, experience: c.experience,
+        bio: c.bio, skills: c.skills
+    }));
+
+    try {
+        const res = await fetch('http://localhost:5000/rank', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ jd, candidates: payload })
+        });
+        if (!res.ok) throw new Error('Server returned ' + res.status);
+        const scores = await res.json();
+        if (scores.error) throw new Error(scores.error);
+
+        const scoreMap = Object.fromEntries(scores.map(s => [s.id, s]));
+        ranked = CANDIDATES.map(c => ({
+            ...c,
+            score: scoreMap[c.id]?.score ?? 0,
+            reasoning: scoreMap[c.id]?.reasoning ?? ''
+        })).sort((a, b) => b.score - a.score);
+
+    } catch (err) {
+        btn.textContent = 'Find Candidates →';
+        btn.disabled = false;
+        alert('Could not reach the ranking server.\nMake sure server.py is running:\n  python server.py\n\nError: ' + err.message);
+        return;
+    }
+
+    idx = 0;
+    saved = [];
+    btn.textContent = 'Find Candidates →';
+    btn.disabled = false;
+
+    document.getElementById('jd-phase').classList.add('hidden');
+    document.getElementById('swipe-phase').classList.remove('hidden');
+    renderCard();
+    updateProgress();
+}
+
+function renderCard() {
+    const stack = document.getElementById('card-stack');
+    stack.innerHTML = '';
+
+    if (idx >= ranked.length) { showResults(); return; }
+
+    const c = ranked[idx];
+    const cls = matchClass(c.score);
+    const lbl = matchLabel(c.score);
+
+    const hardHTML = c.skills.hard.map(s =>
+        `<span class="skill-tag skill-hard ${isMatch(s) ? 'match' : ''}">${s}</span>`
+    ).join('');
+
+    const toolsHTML = c.skills.tools.map(s =>
+        `<span class="skill-tag skill-tool ${isMatch(s) ? 'match' : ''}">${s}</span>`
+    ).join('');
+
+    const card = document.createElement('div');
+    card.className = 'candidate-card';
+    card.id = 'current-card';
+    card.innerHTML = `
+        <span class="swipe-hint hint-pass">PASS</span>
+        <span class="swipe-hint hint-save">SAVE</span>
+        <div class="match-badge ${cls}">
+            <div class="match-dot"></div>${lbl} &middot; ${c.score}%
+        </div>
+        ${c.reasoning ? `<div class="candidate-reasoning">${c.reasoning}</div>` : ''}
+        <div class="candidate-name">${c.name}</div>
+        <div class="candidate-title">${c.title}</div>
+        <div class="candidate-exp">${c.experience} experience</div>
+        <div class="divider"></div>
+        <div class="section-label">Hard Skills</div>
+        <div class="skills">${hardHTML}</div>
+        <div class="section-label" style="margin-top:10px;">Tools</div>
+        <div class="skills">${toolsHTML}</div>
+        <div class="soft-skills-line"><strong style="color:#bbb;font-size:10px;text-transform:uppercase;letter-spacing:.06em;">Soft&nbsp;</strong>${c.skills.soft.join(' · ')}</div>
+        <div class="divider"></div>
+        <div class="section-label">About</div>
+        <div class="candidate-bio">${c.bio}</div>
+    `;
+    stack.appendChild(card);
+}
+
+function swipe(dir) {
+    const card = document.getElementById('current-card');
+    if (!card) return;
+
+    if (dir === 'right') {
+        card.classList.add('swipe-right');
+        saved.push(ranked[idx]);
+    } else {
+        card.classList.add('swipe-left');
+    }
+    idx++;
+    updateProgress();
+    setTimeout(renderCard, 420);
+}
+
+function updateProgress() {
+    const total = ranked.length;
+    document.getElementById('progress-label').textContent = `${Math.min(idx + 1, total)} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${(idx / total) * 100}%`;
+    document.getElementById('saved-count').textContent = `${saved.length} saved`;
+}
+
+function showResults() {
+    document.getElementById('swipe-phase').classList.add('hidden');
+    document.getElementById('results-phase').classList.remove('hidden');
+
+    document.getElementById('results-summary').textContent = saved.length > 0
+        ? `You shortlisted ${saved.length} candidate${saved.length !== 1 ? 's' : ''} out of ${ranked.length}.`
+        : `You passed on all ${ranked.length} candidates.`;
+
+    const list = document.getElementById('saved-list');
+    if (saved.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="big">🤔</div><p>No candidates saved. Try a broader JD next time.</p></div>`;
+        return;
+    }
+
+    list.innerHTML = saved.map(c => `
+        <div class="saved-card">
+            <div class="saved-info">
+                <h3>${c.name}</h3>
+                <p>${c.title} &middot; ${c.experience}</p>
+                <div class="saved-skills">${c.skills.hard.slice(0, 4).join(' · ')}</div>
+            </div>
+            <div class="saved-pct">${c.score}% match</div>
+        </div>
+    `).join('');
+}
+
+function restart() {
+    saved = [];
+    ranked = [];
+    idx = 0;
+    document.getElementById('results-phase').classList.add('hidden');
+    document.getElementById('jd-phase').classList.remove('hidden');
+    document.getElementById('jd-input').value = '';
+}
+
+document.addEventListener('keydown', e => {
+    if (document.getElementById('swipe-phase').classList.contains('hidden')) return;
+    if (e.key === 'ArrowLeft') swipe('left');
+    if (e.key === 'ArrowRight') swipe('right');
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "id": 4,
+  "name": "Derek Thompson",
+  "email": "derek.thompson@email.com",
+  "phone": "+1 (312) 555-0957",
+  "location": "Chicago, IL",
+  "title": "Java Backend Engineer",
+  "experience_years": 8,
+  "summary": "Senior backend engineer with 8 years of expertise in enterprise Java and distributed systems. Architected a microservices migration for a legacy monolith serving 2M+ users. Deep knowledge of system design, performance tuning, and event-driven architecture.",
+  "skills": {
+    "hard": ["Java", "Spring Boot", "MySQL", "Kafka", "Microservices", "Distributed systems", "Event-driven architecture"],
+    "soft": ["Technical leadership", "Systematic thinking", "Mentorship", "Clear documentation"],
+    "tools": ["AWS", "Docker", "Elasticsearch", "Maven", "JUnit"]
+  },
+  "work_history": [
+    {
+      "company": "TrustCore Financial",
+      "role": "Principal Backend Engineer",
+      "duration": "2020 – Present",
+      "highlights": [
+        "Architected migration of 10-year-old monolith to 14 microservices serving 2M+ users",
+        "Designed Kafka-based event streaming layer handling 50k events/second",
+        "Reduced average API latency by 65% through connection pooling and N+1 query elimination"
+      ]
+    },
+    {
+      "company": "LogiTrack",
+      "role": "Senior Java Developer",
+      "duration": "2018 – 2020",
+      "highlights": [
+        "Owned the order management service processing $500M in annual transactions",
+        "Introduced Elasticsearch for full-text order search, replacing costly DB full scans"
+      ]
+    },
+    {
+      "company": "SilverByte",
+      "role": "Java Developer",
+      "duration": "2016 – 2018",
+      "highlights": [
+        "Developed REST APIs for an enterprise HR platform used by 200+ companies",
+        "Maintained and extended Spring Batch jobs for nightly payroll processing"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Computer Science",
+    "institution": "University of Illinois Urbana-Champaign",
+    "year": 2016
+  }
+}

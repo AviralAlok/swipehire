@@ -1,0 +1,50 @@
+{
+  "id": 5,
+  "name": "Emma Walsh",
+  "email": "emma.walsh@email.com",
+  "phone": "+1 (617) 555-0372",
+  "location": "Boston, MA",
+  "title": "Product Manager",
+  "experience_years": 6,
+  "summary": "PM with an engineering background who bridges technical and business teams. Launched 4 B2B SaaS products. Comfortable diving into data, writing tight specs, and pushing back on scope creep.",
+  "skills": {
+    "hard": ["Product discovery", "User research", "Sprint facilitation", "Data analysis", "B2B SaaS", "Go-to-market planning"],
+    "soft": ["Cross-functional leadership", "Empathy", "Clear writing", "Prioritization", "Influencing without authority"],
+    "tools": ["Jira", "Figma", "SQL", "Mixpanel", "Notion"]
+  },
+  "work_history": [
+    {
+      "company": "Buildboard (B2B SaaS)",
+      "role": "Senior Product Manager",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Owned the core workflow product used by 300+ enterprise customers",
+        "Led discovery and launch of an AI-assisted reporting feature, driving 25% upsell",
+        "Ran weekly sprint ceremonies and maintained a 6-month roadmap aligned with sales commitments"
+      ]
+    },
+    {
+      "company": "Forma",
+      "role": "Product Manager",
+      "duration": "2020 – 2022",
+      "highlights": [
+        "Launched 2 new product lines from discovery to GA in under 5 months each",
+        "Introduced a user interview program — conducted 80+ sessions in the first year"
+      ]
+    },
+    {
+      "company": "Accenture",
+      "role": "Software Engineer",
+      "duration": "2018 – 2020",
+      "highlights": [
+        "Worked on enterprise Java backend systems before transitioning to product",
+        "Engineering background produces unusually tight and unambiguous product specs"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Computer Science",
+    "institution": "Boston University",
+    "year": 2018
+  }
+}

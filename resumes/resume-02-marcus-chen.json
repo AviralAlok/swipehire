@@ -1,0 +1,50 @@
+{
+  "id": 2,
+  "name": "Marcus Chen",
+  "email": "marcus.chen@email.com",
+  "phone": "+1 (512) 555-0347",
+  "location": "Austin, TX",
+  "title": "Full Stack Developer",
+  "experience_years": 4,
+  "summary": "Full stack developer comfortable across the entire web stack. Built and shipped 3 SaaS products from scratch. Thrives in fast-paced startup environments and takes full ownership of features from DB schema to UI.",
+  "skills": {
+    "hard": ["Node.js", "React", "PostgreSQL", "Docker", "REST APIs", "TypeScript", "Express"],
+    "soft": ["Ownership mentality", "Fast learner", "Pragmatic problem-solver", "Direct communicator"],
+    "tools": ["AWS EC2", "Redis", "Postman", "GitHub", "Jira"]
+  },
+  "work_history": [
+    {
+      "company": "LaunchPad SaaS",
+      "role": "Full Stack Developer",
+      "duration": "2022 – Present",
+      "highlights": [
+        "Architected and launched a B2B invoicing platform from 0 to 1,200 paying customers",
+        "Designed PostgreSQL schema supporting multi-tenancy with row-level security",
+        "Set up Docker-based CI/CD on AWS, reducing release cycle from weekly to daily"
+      ]
+    },
+    {
+      "company": "Taskflow",
+      "role": "Backend Developer",
+      "duration": "2021 – 2022",
+      "highlights": [
+        "Built RESTful API serving a 50k MAU project management tool",
+        "Introduced Redis caching layer cutting average API response time by 60%"
+      ]
+    },
+    {
+      "company": "Freelance",
+      "role": "Web Developer",
+      "duration": "2020 – 2021",
+      "highlights": [
+        "Delivered 5 client projects including e-commerce stores and internal dashboards",
+        "Worked primarily with React, Node.js, and Firebase"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "B.S. Information Systems",
+    "institution": "University of Texas at Austin",
+    "year": 2020
+  }
+}
