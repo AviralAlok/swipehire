@@ -75,6 +75,22 @@
         .btn-primary:hover { background: #1d4ed8; }
         .btn-primary:disabled { background: #93afd4; cursor: not-allowed; }
 
+        .upload-area {
+            margin-top: 16px;
+            border: 2px dashed #e0e0e0;
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .upload-area:hover { border-color: #2563eb; background: #f0f5ff; }
+        .upload-area.loaded { border-color: #22c55e; background: #f0fdf4; border-style: solid; }
+        .upload-label { cursor: pointer; font-size: 14px; color: #666; }
+        .upload-label strong { color: #2563eb; }
+        .upload-area.loaded .upload-label strong { color: #16a34a; }
+        .upload-hint { font-size: 12px; color: #aaa; margin-top: 4px; }
+
         .candidate-reasoning {
             font-size: 12px;
             color: #666;
@@ -324,6 +340,11 @@
         <h2>Post a Job Description</h2>
         <p>Paste your JD below and we'll rank the best matching candidates for you to review.</p>
         <textarea id="jd-input" placeholder="e.g. We're looking for a Quantitative Analyst with 3+ years at a hedge fund or investment bank. Strong Python and statistical modeling skills required. Bloomberg Terminal experience a plus..."></textarea>
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('csv-input').click()">
+            <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(event)">
+            <div class="upload-label"><strong>Upload resume CSV</strong></div>
+            <div class="upload-hint" id="upload-hint">Optional — uses built-in demo pool if skipped</div>
+        </div>
         <button class="btn-primary" onclick="startSwiping()">Find Candidates →</button>
     </div>
 </div>
@@ -522,10 +543,66 @@ const STOPWORDS = new Set([
     'team','new','well','including','skills','role','join','candidate','responsibilities'
 ]);
 
+const API = window.location.protocol === 'file:' ? 'http://localhost:5000' : '';
+
 let ranked = [];
 let idx = 0;
 let saved = [];
 let jdTokens = [];
+let uploadedResumes = [];  // [{id, text}] from CSV upload
+
+function parseCSV(text) {
+    const rows = [];
+    let row = [], field = '', inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQuotes) {
+            if (ch === '"' && text[i + 1] === '"') { field += '"'; i++; }
+            else if (ch === '"') { inQuotes = false; }
+            else { field += ch; }
+        } else {
+            if (ch === '"') { inQuotes = true; }
+            else if (ch === ',') { row.push(field); field = ''; }
+            else if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+            else if (ch !== '\r') { field += ch; }
+        }
+    }
+    if (field || row.length) { row.push(field); rows.push(row); }
+    return rows;
+}
+
+function handleCSV(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+        const rows = parseCSV(e.target.result).filter(r => r.some(c => c.trim()));
+        if (rows.length < 2) { alert('CSV appears empty or has only one row.'); return; }
+
+        const headers = rows[0].map(h => h.trim().toLowerCase());
+        // Find the resume text column: prefer named columns, else longest avg text
+        let colIdx = headers.findIndex(h => ['resume', 'text', 'content', 'cv', 'description'].includes(h));
+        if (colIdx === -1) {
+            const avgs = headers.map((_, ci) =>
+                rows.slice(1).reduce((s, r) => s + (r[ci] || '').length, 0) / (rows.length - 1)
+            );
+            colIdx = avgs.indexOf(Math.max(...avgs));
+        }
+
+        uploadedResumes = rows.slice(1)
+            .map((r, i) => ({ id: i + 1, text: (r[colIdx] || '').trim() }))
+            .filter(r => r.text.length > 50)
+            .slice(0, 25);
+
+        const area = document.getElementById('upload-area');
+        area.classList.add('loaded');
+        document.querySelector('#upload-area .upload-label').innerHTML =
+            `<strong>✓ ${uploadedResumes.length} resumes loaded</strong> — ${file.name}`;
+        document.getElementById('upload-hint').textContent =
+            uploadedResumes.length === 25 ? 'Capped at 25 resumes per query' : '';
+    };
+    reader.readAsText(file);
+}
 
 function tokenize(text) {
     return text.toLowerCase()
@@ -560,28 +637,40 @@ async function startSwiping() {
 
     jdTokens = tokenize(jd);
 
-    const payload = CANDIDATES.map(c => ({
-        id: c.id, name: c.name, title: c.title, experience: c.experience,
-        bio: c.bio, skills: c.skills
-    }));
-
     try {
-        const res = await fetch('http://localhost:5000/rank', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ jd, candidates: payload })
-        });
-        if (!res.ok) throw new Error('Server returned ' + res.status);
-        const scores = await res.json();
-        if (scores.error) throw new Error(scores.error);
+        if (uploadedResumes.length > 0) {
+            // Real resume flow: Claude extracts structure + scores in one pass
+            const res = await fetch(`${API}/rank-resumes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jd, resumes: uploadedResumes })
+            });
+            if (!res.ok) throw new Error('Server returned ' + res.status);
+            const data = await res.json();
+            if (data.error) throw new Error(data.error);
+            ranked = data;
+        } else {
+            // Demo flow: hardcoded candidates, Claude scores only
+            const payload = CANDIDATES.map(c => ({
+                id: c.id, name: c.name, title: c.title, experience: c.experience,
+                bio: c.bio, skills: c.skills
+            }));
+            const res = await fetch(`${API}/rank`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ jd, candidates: payload })
+            });
+            if (!res.ok) throw new Error('Server returned ' + res.status);
+            const scores = await res.json();
+            if (scores.error) throw new Error(scores.error);
 
-        const scoreMap = Object.fromEntries(scores.map(s => [s.id, s]));
-        ranked = CANDIDATES.map(c => ({
-            ...c,
-            score: scoreMap[c.id]?.score ?? 0,
-            reasoning: scoreMap[c.id]?.reasoning ?? ''
-        })).sort((a, b) => b.score - a.score);
-
+            const scoreMap = Object.fromEntries(scores.map(s => [s.id, s]));
+            ranked = CANDIDATES.map(c => ({
+                ...c,
+                score: scoreMap[c.id]?.score ?? 0,
+                reasoning: scoreMap[c.id]?.reasoning ?? ''
+            })).sort((a, b) => b.score - a.score);
+        }
     } catch (err) {
         btn.textContent = 'Find Candidates →';
         btn.disabled = false;
@@ -696,9 +785,15 @@ function restart() {
     saved = [];
     ranked = [];
     idx = 0;
+    uploadedResumes = [];
     document.getElementById('results-phase').classList.add('hidden');
     document.getElementById('jd-phase').classList.remove('hidden');
     document.getElementById('jd-input').value = '';
+    document.getElementById('csv-input').value = '';
+    const area = document.getElementById('upload-area');
+    area.classList.remove('loaded');
+    area.querySelector('.upload-label').innerHTML = '<strong>Upload resume CSV</strong>';
+    document.getElementById('upload-hint').textContent = 'Optional — uses built-in demo pool if skipped';
 }
 
 document.addEventListener('keydown', e => {

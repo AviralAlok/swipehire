@@ -2,7 +2,7 @@
 
 A Tinder-style recruiter tool. Paste a job description, get candidates ranked by AI match score, then swipe right to save or left to pass.
 
-![SwipeHire demo](https://via.placeholder.com/800x400?text=SwipeHire)
+![SwipeHire](banner.svg)
 
 ## How it works
 
