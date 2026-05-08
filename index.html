@@ -340,9 +340,9 @@
         <h2>Post a Job Description</h2>
         <p>Paste your JD below and we'll rank the best matching candidates for you to review.</p>
         <textarea id="jd-input" placeholder="e.g. We're looking for a Quantitative Analyst with 3+ years at a hedge fund or investment bank. Strong Python and statistical modeling skills required. Bloomberg Terminal experience a plus..."></textarea>
-        <div class="upload-area" id="upload-area" onclick="document.getElementById('csv-input').click()">
-            <input type="file" id="csv-input" accept=".csv" style="display:none" onchange="handleCSV(event)">
-            <div class="upload-label"><strong>Upload resume CSV</strong></div>
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+            <input type="file" id="file-input" accept=".pdf,.csv" multiple style="display:none" onchange="handleFiles(event)">
+            <div class="upload-label"><strong>Upload resumes</strong> — PDF or CSV</div>
             <div class="upload-hint" id="upload-hint">Optional — uses built-in demo pool if skipped</div>
         </div>
         <button class="btn-primary" onclick="startSwiping()">Find Candidates →</button>
@@ -571,16 +571,54 @@ function parseCSV(text) {
     return rows;
 }
 
-function handleCSV(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+function handleFiles(event) {
+    const files = Array.from(event.target.files);
+    if (!files.length) return;
+
+    const isPDF = files[0].name.toLowerCase().endsWith('.pdf');
+
+    if (isPDF) {
+        _handlePDFs(files);
+    } else {
+        _handleCSV(files[0]);
+    }
+}
+
+async function _handlePDFs(files) {
+    const area = document.getElementById('upload-area');
+    document.querySelector('#upload-area .upload-label').innerHTML =
+        `<strong>Extracting text from ${files.length} PDF${files.length !== 1 ? 's' : ''}…</strong>`;
+    document.getElementById('upload-hint').textContent = '';
+
+    const form = new FormData();
+    files.slice(0, 25).forEach(f => form.append('pdfs', f));
+
+    try {
+        const res = await fetch(`${API}/extract`, { method: 'POST', body: form });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Extraction failed');
+
+        uploadedResumes = data;
+        area.classList.add('loaded');
+        document.querySelector('#upload-area .upload-label').innerHTML =
+            `<strong>✓ ${uploadedResumes.length} resumes loaded</strong> — ${files.length} PDFs`;
+        document.getElementById('upload-hint').textContent =
+            files.length > 25 ? 'Capped at 25 resumes per query' : '';
+    } catch (err) {
+        document.querySelector('#upload-area .upload-label').innerHTML =
+            '<strong>Upload resumes</strong> — PDF or CSV';
+        document.getElementById('upload-hint').textContent = 'Optional — uses built-in demo pool if skipped';
+        alert('PDF extraction failed: ' + err.message);
+    }
+}
+
+function _handleCSV(file) {
     const reader = new FileReader();
     reader.onload = e => {
         const rows = parseCSV(e.target.result).filter(r => r.some(c => c.trim()));
         if (rows.length < 2) { alert('CSV appears empty or has only one row.'); return; }
 
         const headers = rows[0].map(h => h.trim().toLowerCase());
-        // Find the resume text column: prefer named columns, else longest avg text
         let colIdx = headers.findIndex(h => ['resume', 'text', 'content', 'cv', 'description'].includes(h));
         if (colIdx === -1) {
             const avgs = headers.map((_, ci) =>
@@ -789,10 +827,10 @@ function restart() {
     document.getElementById('results-phase').classList.add('hidden');
     document.getElementById('jd-phase').classList.remove('hidden');
     document.getElementById('jd-input').value = '';
-    document.getElementById('csv-input').value = '';
+    document.getElementById('file-input').value = '';
     const area = document.getElementById('upload-area');
     area.classList.remove('loaded');
-    area.querySelector('.upload-label').innerHTML = '<strong>Upload resume CSV</strong>';
+    area.querySelector('.upload-label').innerHTML = '<strong>Upload resumes</strong> — PDF or CSV';
     document.getElementById('upload-hint').textContent = 'Optional — uses built-in demo pool if skipped';
 }
 

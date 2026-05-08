@@ -1,8 +1,10 @@
+import io
 import json
 import os
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import anthropic
+import pdfplumber
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -105,6 +107,30 @@ def rank_resumes():
 
     candidates.sort(key=lambda x: x.get("score", 0), reverse=True)
     return jsonify(candidates)
+
+
+@app.route("/extract", methods=["POST"])
+def extract():
+    files = request.files.getlist("pdfs")
+    if not files:
+        return jsonify({"error": "No PDF files provided"}), 400
+
+    results = []
+    for i, f in enumerate(files[:25]):
+        try:
+            with pdfplumber.open(io.BytesIO(f.read())) as pdf:
+                text = "\n".join(
+                    page.extract_text() or "" for page in pdf.pages[:4]
+                ).strip()
+            if text:
+                results.append({"id": i + 1, "filename": f.filename, "text": text})
+        except Exception:
+            continue
+
+    if not results:
+        return jsonify({"error": "No text could be extracted. PDFs may be scanned images."}), 422
+
+    return jsonify(results)
 
 
 @app.route("/")
